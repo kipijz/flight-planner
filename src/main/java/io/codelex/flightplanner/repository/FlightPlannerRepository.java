@@ -100,13 +100,17 @@ public class FlightPlannerRepository {
     }
 
     private boolean isExistingFlight(int id) {
-        return flights.stream()
+//        izmantoju flightsCopy šeit un 112. rindā, jo bez viņa dažreiz 06-concurrency.test (pirmais) izmeta ConcurrentModificationException
+//        https://stackoverflow.com/questions/45654000/java-util-concurrentmodificationexception-in-a-servlet
+        List<Flight> flightsCopy = new ArrayList<>(flights);
+        return flightsCopy.stream()
                 .map(Flight::getId)
                 .anyMatch(integer -> integer == id);
     }
 
     private Flight findAndReturnExistingFlight(int id) {
-        return flights.stream()
+        List<Flight> flightsCopy = new ArrayList<>(flights);
+        return flightsCopy.stream()
                 .filter(flight -> flight.getId() == id)
                 .findFirst()
                 .get();
