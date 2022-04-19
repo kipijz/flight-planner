@@ -7,7 +7,6 @@ import io.codelex.flightplanner.SearchFlightRequest;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +23,7 @@ public class FlightPlannerService {
         flightPlannerRepository.clearFlights();
     }
 
-    public CompletableFuture<ResponseEntity<Flight>> addFlight(@RequestBody Flight flight) {
+    public CompletableFuture<ResponseEntity<Flight>> addFlight(Flight flight) {
         return flightPlannerRepository.addFlight(flight);
     }
 
