@@ -5,11 +5,9 @@ import io.codelex.flightplanner.Flight;
 import io.codelex.flightplanner.PageResult;
 import io.codelex.flightplanner.SearchFlightRequest;
 import io.codelex.flightplanner.repository.FlightPlannerRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class FlightPlannerService {
@@ -23,24 +21,24 @@ public class FlightPlannerService {
         flightPlannerRepository.clearFlights();
     }
 
-    public CompletableFuture<ResponseEntity<Flight>> addFlight(Flight flight) {
+    public Flight addFlight(Flight flight) {
         return flightPlannerRepository.addFlight(flight);
     }
 
-    public ResponseEntity<Flight> fetchFlight(int id) {
+    public Flight fetchFlight(int id) {
         return flightPlannerRepository.fetchFlight(id);
     }
 
-    public CompletableFuture<ResponseEntity<Flight>> deleteFlight(int id) {
-        return flightPlannerRepository.deleteFlight(id);
+    public void deleteFlight(int id) {
+        flightPlannerRepository.deleteFlight(id);
 
     }
 
-    public ResponseEntity<List<Airport>> searchAirports(String search) {
+    public List<Airport> searchAirports(String search) {
         return flightPlannerRepository.searchAirports(search);
     }
 
-    public ResponseEntity<PageResult> searchFlights(SearchFlightRequest flight) {
-        return  flightPlannerRepository.searchFlights(flight);
+    public PageResult searchFlights(SearchFlightRequest flight) {
+        return flightPlannerRepository.searchFlights(flight);
     }
 }

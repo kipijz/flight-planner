@@ -5,7 +5,6 @@ import io.codelex.flightplanner.Flight;
 import io.codelex.flightplanner.PageResult;
 import io.codelex.flightplanner.SearchFlightRequest;
 import io.codelex.flightplanner.service.FlightPlannerService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,17 +20,17 @@ public class CustomerController {
     }
 
     @GetMapping("airports")
-    public ResponseEntity<List<Airport>> searchAirports(@RequestParam("search") String search) {
+    public List<Airport> searchAirports(@RequestParam("search") String search) {
         return flightPlannerService.searchAirports(search);
     }
 
     @PostMapping("flights/search")
-    public ResponseEntity<PageResult> searchFlights(@Valid @RequestBody SearchFlightRequest flight) {
+    public PageResult searchFlights(@Valid @RequestBody SearchFlightRequest flight) {
         return flightPlannerService.searchFlights(flight);
     }
 
     @GetMapping("flights/{id}")
-    public ResponseEntity<Flight> fetchFlight(@PathVariable("id") int id) {
+    public Flight fetchFlight(@PathVariable("id") int id) {
         return flightPlannerService.fetchFlight(id);
     }
 }
