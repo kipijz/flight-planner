@@ -25,11 +25,9 @@ public class FlightPlannerRepository {
         if (flights.contains(flight)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-
         if (isFromAndToSameAirport(flight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-
         if (hasInvalidDates(flight)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
@@ -37,7 +35,7 @@ public class FlightPlannerRepository {
         flight.setId(flightId);
         flightId++;
         flights.add(flight);
-        return flights.get(flights.size() - 1);
+        return flight;
     }
 
     public Flight fetchFlight(int id) {
@@ -55,16 +53,12 @@ public class FlightPlannerRepository {
     }
 
     public List<Airport> searchAirports(String search) {
-        List<Airport> airportList = getExistingAirportList(search);
-        if (airportList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        }
-        return airportList;
+        return getExistingAirportList(search);
     }
 
-    public PageResult searchFlights(SearchFlightRequest flight) {
-        PageResult pageResult = getExistingFlight(flight);
-        if (flight.getTo().equals(flight.getFrom())) {
+    public PageResult searchFlights(SearchFlightRequest request) {
+        PageResult pageResult = getExistingFlight(request);
+        if (request.getTo().equals(request.getFrom())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return pageResult;
@@ -107,12 +101,12 @@ public class FlightPlannerRepository {
         return airportList;
     }
 
-    private PageResult getExistingFlight(SearchFlightRequest flight) {
+    private PageResult getExistingFlight(SearchFlightRequest request) {
         PageResult pageResult = new PageResult();
         for (Flight value : flights) {
-            if (value.getFrom().getAirport().equals(flight.getFrom())
-                    && value.getTo().getAirport().equals(flight.getTo())
-                    && String.valueOf(value.getDepartureTime()).contains(flight.getDepartureDate())) {
+            if (value.getFrom().getAirport().equals(request.getFrom())
+                    && value.getTo().getAirport().equals(request.getTo())
+                    && String.valueOf(value.getDepartureTime()).contains(request.getDepartureDate())) {
                 pageResult.setTotalItems(1);
                 break;
             }

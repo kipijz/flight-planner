@@ -31,14 +31,13 @@ public class FlightPlannerService {
 
     public void deleteFlight(int id) {
         flightPlannerRepository.deleteFlight(id);
-
     }
 
     public List<Airport> searchAirports(String search) {
         return flightPlannerRepository.searchAirports(search);
     }
 
-    public PageResult searchFlights(SearchFlightRequest flight) {
-        return flightPlannerRepository.searchFlights(flight);
+    public PageResult searchFlights(SearchFlightRequest request) {
+        return flightPlannerRepository.searchFlights(request);
     }
 }
