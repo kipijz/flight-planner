@@ -25,8 +25,8 @@ public class CustomerController {
     }
 
     @PostMapping("flights/search")
-    public PageResult searchFlights(@Valid @RequestBody SearchFlightRequest flight) {
-        return flightPlannerService.searchFlights(flight);
+    public PageResult searchFlights(@Valid @RequestBody SearchFlightRequest request) {
+        return flightPlannerService.searchFlights(request);
     }
 
     @GetMapping("flights/{id}")

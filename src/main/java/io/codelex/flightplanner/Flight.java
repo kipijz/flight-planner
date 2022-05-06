@@ -31,16 +31,16 @@ public class Flight {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
 
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     public Flight(long id, Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
         this.id = id;
         this.from = from;
         this.to = to;
         this.carrier = carrier;
-        this.departureTime = LocalDateTime.parse(departureTime, formatter);
-        this.arrivalTime = LocalDateTime.parse(arrivalTime, formatter);
+        this.departureTime = LocalDateTime.parse(departureTime, FORMATTER);
+        this.arrivalTime = LocalDateTime.parse(arrivalTime, FORMATTER);
     }
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public long getId() {
         return id;
