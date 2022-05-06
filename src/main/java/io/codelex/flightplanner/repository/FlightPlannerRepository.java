@@ -106,7 +106,7 @@ public class FlightPlannerRepository {
         for (Flight value : flights) {
             if (value.getFrom().getAirport().equals(request.getFrom())
                     && value.getTo().getAirport().equals(request.getTo())
-                    && String.valueOf(value.getDepartureTime()).contains(request.getDepartureDate())) {
+                    && value.getDepartureTime().toLocalDate().equals(request.getDepartureDate())) {
                 pageResult.setTotalItems(1);
                 break;
             }

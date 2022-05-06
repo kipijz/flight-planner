@@ -1,16 +1,18 @@
 package io.codelex.flightplanner;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 public class SearchFlightRequest {
     @NotBlank
     private String from;
     @NotBlank
     private String to;
-    @NotBlank
-    private String departureDate;
+    @NotNull
+    private LocalDate departureDate;
 
-    public SearchFlightRequest(String from, String to, String departureDate) {
+    public SearchFlightRequest(String from, String to, LocalDate departureDate) {
         this.from = from;
         this.to = to;
         this.departureDate = departureDate;
@@ -32,11 +34,11 @@ public class SearchFlightRequest {
         this.to = to;
     }
 
-    public String getDepartureDate() {
+    public LocalDate getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(String departureDate) {
+    public void setDepartureDate(LocalDate departureDate) {
         this.departureDate = departureDate;
     }
 }
