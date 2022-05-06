@@ -38,18 +38,17 @@ public class FlightPlannerRepository {
         return flight;
     }
 
-    public Flight fetchFlight(int id) {
-        if (isExistingFlight(id)) {
-            return findExistingFlight(id);
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    public Flight fetchFlight(long id) {
+        return flights.stream()
+                .filter(flight -> flight.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    public synchronized void deleteFlight(int id) {
-        if (isExistingFlight(id)) {
-            Flight foundFlight = findExistingFlight(id);
-            flights.remove(foundFlight);
-        }
+    public synchronized void deleteFlight(long id) {
+        flights.stream()
+                .filter(flight -> flight.getId() == id)
+                .findFirst().ifPresent(flights::remove);
     }
 
     public List<Airport> searchAirports(String search) {
@@ -57,11 +56,10 @@ public class FlightPlannerRepository {
     }
 
     public PageResult searchFlights(SearchFlightRequest request) {
-        PageResult pageResult = getExistingFlight(request);
         if (request.getTo().equals(request.getFrom())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        return pageResult;
+        return getExistingFlight(request);
     }
 
     private boolean isFromAndToSameAirport(Flight flight) {
@@ -75,42 +73,25 @@ public class FlightPlannerRepository {
                 || flight.getDepartureTime().isAfter(flight.getArrivalTime());
     }
 
-    private boolean isExistingFlight(int id) {
-        return flights.stream()
-                .map(Flight::getId)
-                .anyMatch(integer -> integer == id);
-    }
-
-    private Flight findExistingFlight(int id) {
-        return FlightPlannerRepository.this.flights.stream()
-                .filter(flight -> flight.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }
-
     private List<Airport> getExistingAirportList(String search) {
-        List<Airport> airportList = new ArrayList<>();
         String searchTrimmedLowerCase = search.replace(" ", "").toLowerCase();
-        for (Flight flight : flights) {
-            if (flight.getFrom().getCountry().toLowerCase().contains(searchTrimmedLowerCase)
-                    || flight.getFrom().getAirport().toLowerCase().contains(searchTrimmedLowerCase)
-                    || flight.getFrom().getCity().toLowerCase().contains(searchTrimmedLowerCase)) {
-                airportList.add(flight.getFrom());
-            }
-        }
-        return airportList;
+        return flights.stream()
+                .filter(flight -> flight.getFrom().getCountry().toLowerCase().contains(searchTrimmedLowerCase)
+                        || flight.getFrom().getAirport().toLowerCase().contains(searchTrimmedLowerCase)
+                        || flight.getFrom().getCity().toLowerCase().contains(searchTrimmedLowerCase))
+                .map(Flight::getFrom)
+                .toList();
     }
 
     private PageResult getExistingFlight(SearchFlightRequest request) {
         PageResult pageResult = new PageResult();
-        for (Flight value : flights) {
-            if (value.getFrom().getAirport().equals(request.getFrom())
-                    && value.getTo().getAirport().equals(request.getTo())
-                    && value.getDepartureTime().toLocalDate().equals(request.getDepartureDate())) {
-                pageResult.setTotalItems(1);
-                break;
-            }
-        }
+        List<Flight> existingFlightsList = flights.stream()
+                .filter(flight -> flight.getFrom().getAirport().equals(request.getFrom())
+                        && flight.getTo().getAirport().equals(request.getTo())
+                        && flight.getDepartureTime().toLocalDate().equals(request.getDepartureDate()))
+                .toList();
+        pageResult.addItems(existingFlightsList);
+        pageResult.addTotalItems(existingFlightsList.size());
         return pageResult;
     }
 }

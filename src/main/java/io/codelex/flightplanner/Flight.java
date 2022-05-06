@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Flight {
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
     private long id;
 
     @Valid
@@ -30,8 +32,6 @@ public class Flight {
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime arrivalTime;
-
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public Flight(long id, Airport from, Airport to, String carrier, String departureTime, String arrivalTime) {
         this.id = id;

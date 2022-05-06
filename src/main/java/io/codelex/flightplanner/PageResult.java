@@ -39,4 +39,12 @@ public class PageResult {
     public void setItems(List<Flight> items) {
         this.items = items;
     }
+
+    public void addTotalItems(int amount) {
+        this.totalItems += amount;
+    }
+
+    public void addItems(List<Flight> items) {
+        this.items.addAll(items);
+    }
 }
