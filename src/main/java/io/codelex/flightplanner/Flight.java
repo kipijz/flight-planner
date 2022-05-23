@@ -2,6 +2,7 @@ package io.codelex.flightplanner;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,17 +10,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@Entity
 public class Flight {
+    @Transient
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
 
     @Valid
     @NotNull
+    @JoinColumn(name = "from_id")
+    @ManyToOne
     private Airport from;
 
     @Valid
     @NotNull
+    @JoinColumn(name = "to_id")
+    @ManyToOne
     private Airport to;
 
     @NotBlank
@@ -40,6 +49,10 @@ public class Flight {
         this.carrier = carrier;
         this.departureTime = LocalDateTime.parse(departureTime, FORMATTER);
         this.arrivalTime = LocalDateTime.parse(arrivalTime, FORMATTER);
+    }
+
+    public Flight() {
+
     }
 
     public long getId() {

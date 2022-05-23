@@ -25,12 +25,6 @@ public class FlightPlannerRepository {
         if (flights.contains(flight)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        if (isFromAndToSameAirport(flight)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
-        if (hasInvalidDates(flight)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-        }
 
         flight.setId(flightId);
         flightId++;
@@ -60,17 +54,6 @@ public class FlightPlannerRepository {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return getExistingFlight(request);
-    }
-
-    private boolean isFromAndToSameAirport(Flight flight) {
-        String fromAirportTrimmed = flight.getFrom().getAirport().replace(" ", "");
-        String toAirportTrimmed = flight.getTo().getAirport().replace(" ", "");
-        return fromAirportTrimmed.equalsIgnoreCase(toAirportTrimmed);
-    }
-
-    private boolean hasInvalidDates(Flight flight) {
-        return flight.getDepartureTime().isEqual(flight.getArrivalTime())
-                || flight.getDepartureTime().isAfter(flight.getArrivalTime());
     }
 
     private List<Airport> getExistingAirportList(String search) {
