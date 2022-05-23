@@ -4,40 +4,19 @@ import io.codelex.flightplanner.Airport;
 import io.codelex.flightplanner.Flight;
 import io.codelex.flightplanner.PageResult;
 import io.codelex.flightplanner.SearchFlightRequest;
-import io.codelex.flightplanner.repository.FlightPlannerRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class FlightPlannerService {
-    private final FlightPlannerRepository flightPlannerRepository;
+public interface FlightPlannerService {
+    void clearFlights();
 
-    public FlightPlannerService(FlightPlannerRepository flightPlannerRepository) {
-        this.flightPlannerRepository = flightPlannerRepository;
-    }
+    Flight addFlight(Flight flight);
 
-    public void clearFlights() {
-        flightPlannerRepository.clearFlights();
-    }
+    Flight fetchFlight(long id);
 
-    public Flight addFlight(Flight flight) {
-        return flightPlannerRepository.addFlight(flight);
-    }
+    void deleteFlight(long id);
 
-    public Flight fetchFlight(int id) {
-        return flightPlannerRepository.fetchFlight(id);
-    }
+    List<Airport> searchAirports(String search);
 
-    public void deleteFlight(int id) {
-        flightPlannerRepository.deleteFlight(id);
-    }
-
-    public List<Airport> searchAirports(String search) {
-        return flightPlannerRepository.searchAirports(search);
-    }
-
-    public PageResult searchFlights(SearchFlightRequest request) {
-        return flightPlannerRepository.searchFlights(request);
-    }
+    PageResult searchFlights(SearchFlightRequest request);
 }
